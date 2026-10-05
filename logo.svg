@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- SlothClips logo: an original sloth face whose nose is a "play" button -->
+  <rect width="64" height="64" rx="16" fill="#f4c13d"/>
+  <circle cx="32" cy="34" r="23" fill="#6b4a2f"/>
+  <ellipse cx="32" cy="36.5" rx="18.5" ry="16" fill="#f3e2c4"/>
+  <ellipse cx="22.6" cy="35.2" rx="8.6" ry="4.3" transform="rotate(-28 22.6 35.2)" fill="#3a2717"/>
+  <ellipse cx="41.4" cy="35.2" rx="8.6" ry="4.3" transform="rotate(28 41.4 35.2)" fill="#3a2717"/>
+  <circle cx="24.6" cy="33.6" r="1.9" fill="#fff"/>
+  <circle cx="39.4" cy="33.6" r="1.9" fill="#fff"/>
+  <path d="M29.6 39.6 Q29.6 38.6 30.5 39.1 L35.3 41.7 Q36.1 42.2 35.3 42.7 L30.5 45.3 Q29.6 45.8 29.6 44.8 Z" fill="#3a2717"/>
+  <path d="M27 48.2 Q32 51.6 37 48.2" stroke="#3a2717" stroke-width="1.9" fill="none" stroke-linecap="round"/>
+</svg>
