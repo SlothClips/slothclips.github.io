@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>SlothClips ads</title>
+<!--
+  THE AD PAGE THAT THE SLOTHCLIPS APP SHOWS WHILE SHORTS ARE BEING MADE.
+  It is not linked from the website and Google is told not to list it.
+
+  You don't edit this file. Paste your ad network's code into:
+      slot-1.html   slot-2.html   slot-3.html
+  Each one is shown for SECONDS_PER_AD seconds, then the next one (1 -> 2 -> 3 -> 1 ...).
+  A slot that still has no ad code shows a small "SlothClips is free" card instead.
+-->
+<style>
+  :root { --bg: #131720; --line: #2d3547; --text: #e8ebf1; --muted: #7d8699; --accent: #f4c13d; color-scheme: dark; }
+  @media (prefers-color-scheme: light) { :root { --bg: #ffffff; --line: #d2d7e3; --text: #171b26; --muted: #7a8396; --accent: #e2a900; color-scheme: light; } }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--text); font: 13px/1.4 "Segoe UI", system-ui, sans-serif; overflow: hidden; }
+  .box { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 8px; }
+  .head { width: 300px; max-width: 100%; display: flex; align-items: center; justify-content: space-between; color: var(--muted); font-size: 12px; }
+  .dots { display: flex; gap: 5px; }
+  .dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+  .dots i.on { background: var(--accent); }
+  .slot { position: relative; width: 300px; height: 250px; max-width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+  .slot iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .house { position: absolute; inset: 0; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 22px; text-align: center; }
+  .house img { width: 54px; height: 54px; }
+  .house b { font-size: 16px; }
+  .house span { color: var(--muted); }
+  .house.show { display: flex; }
+  .time { width: 300px; max-width: 100%; height: 3px; border-radius: 2px; background: var(--line); overflow: hidden; }
+  .time i { display: block; height: 100%; width: 0; background: var(--accent); }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="head"><span id="label">Ad 1</span><span class="dots" id="dots"></span></div>
+  <div class="slot">
+    <iframe id="frame" title="Advertisement" scrolling="no"></iframe>
+    <div class="house" id="house">
+      <img src="../logo.svg" alt="">
+      <b>SlothClips is free</b>
+      <span>Ads like this one keep it free - no subscription, no limits. Thanks for making your shorts with us!</span>
+    </div>
+  </div>
+  <div class="time"><i id="time"></i></div>
+</div>
+<script>
+  var ADS = 3;              // how many slot-N.html files there are (add slot-4.html etc. and raise this number)
+  var SECONDS_PER_AD = 30;  // each ad stays this long; ads keep coming one after another until the shorts are done
+
+  var current = 0;
+  var frame = document.getElementById("frame");
+  var house = document.getElementById("house");
+  var dotsBox = document.getElementById("dots");
+  for (var d = 0; d < ADS; d++) dotsBox.appendChild(document.createElement("i"));
+  var dots = dotsBox.querySelectorAll("i");
+  var shown = 0;
+  var bar = document.getElementById("time");
+
+  function show(n) {
+    current = n;
+    shown++;
+    document.getElementById("label").textContent = "Ad " + shown;
+    for (var i = 0; i < dots.length; i++) dots[i].className = i === n ? "on" : "";
+    house.className = "house";
+    frame.style.visibility = "visible";
+    frame.src = "slot-" + (n + 1) + ".html?t=" + Date.now();   // a fresh load = a fresh ad
+    bar.style.transition = "none"; bar.style.width = "0";
+    void bar.offsetWidth;
+    bar.style.transition = "width " + SECONDS_PER_AD + "s linear"; bar.style.width = "100%";
+    // Tell the SlothClips window which ad is on screen (it can show "ad 2 of 3" too).
+    try { parent.postMessage({ slothclipsAd: n + 1, of: ADS }, "*"); } catch (e) {}
+  }
+
+  // A slot whose ad code hasn't been pasted yet shows the "SlothClips is free" card.
+  frame.onload = function () {
+    try {
+      if (frame.contentDocument && frame.contentDocument.getElementById("no-ad-yet")) {
+        frame.style.visibility = "hidden";
+        house.className = "house show";
+      }
+    } catch (e) {}
+  };
+
+  show(0);
+  setInterval(function () { show((current + 1) % ADS); }, SECONDS_PER_AD * 1000);
+</script>
+</body>
+</html>
